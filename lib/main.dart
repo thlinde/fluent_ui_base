@@ -1,18 +1,27 @@
+// ignore_for_file: avoid_print
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'pages/home.dart';
 import 'pages/info.dart';
 import 'pages/settings.dart';
+import 'model/store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
   await windowManager.ensureInitialized();
+  final ProgController prog = Get.put(ProgController());
 
   windowManager.waitUntilReadyToShow().then((_) async {
     await windowManager.setTitleBarStyle(TitleBarStyle.hidden);
-    await windowManager.setSize(const Size(800, 600));
-    await windowManager.center();
+    print('get height ${prog.height}');
+    await windowManager.setSize(Size(prog.width, prog.height));
+    await windowManager.setPosition(Offset(prog.xPos, prog.yPos));
+    // await windowManager.center();
     await windowManager.show();
     await windowManager.setPreventClose(true);
     await windowManager.setSkipTaskbar(false);
@@ -59,6 +68,8 @@ class MyApp extends StatelessWidget {
           ),
         );
       },
+      navigatorKey: Get.key,
+      navigatorObservers: [GetObserver()],
     );
   }
 }
@@ -71,11 +82,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with WindowListener {
-  bool value = false;
 
-  int index = 0;
-
-  // final settingsController = ScrollController();
+  final StoreController store = Get.put(StoreController());
+  final ProgController prog = Get.find();
   final viewKey = GlobalKey();
 
   @override
@@ -87,7 +96,6 @@ class _MainPageState extends State<MainPage> with WindowListener {
   @override
   void dispose() {
     windowManager.removeListener(this);
-    // settingsController.dispose();
     super.dispose();
   }
 
@@ -119,11 +127,11 @@ class _MainPageState extends State<MainPage> with WindowListener {
         automaticallyImplyLeading: false,
       ),
       pane: NavigationPane(
-        selected: index,
-        onChanged: (i) => setState(() => index = i),
+        selected: store.index.value,
+        onChanged: (i) => setState(() => store.updateIndex(i)),
         size: const NavigationPaneSize(
-          openMinWidth: 200,
-          openMaxWidth: 200,
+          openMinWidth: 250,
+          openMaxWidth: 250,
         ),
         header: Container(
           height: kOneLineTileHeight,
@@ -158,7 +166,7 @@ class _MainPageState extends State<MainPage> with WindowListener {
           ),
         ],
       ),
-      content: NavigationBody(index: index, children: const [
+      content: NavigationBody(index: store.index.value, children: const [
         HomePage(),
         InfoPage(),
         SettingsPage(),
@@ -179,8 +187,9 @@ class _MainPageState extends State<MainPage> with WindowListener {
             actions: [
               FilledButton(
                 child: const Text('JA'),
-                onPressed: () {
+                onPressed: () async {
                   Navigator.pop(context);
+                  await saveProgSettings();
                   windowManager.destroy();
                 },
               ),
@@ -195,6 +204,15 @@ class _MainPageState extends State<MainPage> with WindowListener {
         },
       );
     }
+  }
+
+  saveProgSettings() async {
+    final pos = await windowManager.getPosition();
+    prog.setXPos(pos.dx);
+    prog.setyPos(pos.dy);
+    final size = await windowManager.getSize();
+    prog.setHeight(size.height);
+    prog.setWidth(size.width);
   }
 }
 
