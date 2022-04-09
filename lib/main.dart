@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
 
-  windowManager.waitUntilReadyToShow().then((_) async{
+  windowManager.waitUntilReadyToShow().then((_) async {
     await windowManager.setTitleBarStyle(TitleBarStyle.hidden);
     await windowManager.setSize(const Size(800, 600));
     await windowManager.center();
@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
       home: const MainPage(),
       color: Colors.blue,
       darkTheme: ThemeData(
+        fontFamily: 'Segoe',
         brightness: Brightness.dark,
         accentColor: Colors.blue,
         visualDensity: VisualDensity.standard,
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       theme: ThemeData(
+        fontFamily: 'Segoe',
         accentColor: Colors.blue,
         visualDensity: VisualDensity.standard,
         focusTheme: FocusThemeData(
@@ -99,8 +101,11 @@ class _MainPageState extends State<MainPage> with WindowListener {
             child: Align(
               alignment: AlignmentDirectional.centerStart,
               child: Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text('thlinde'),
+                padding: EdgeInsets.only(left: 8.0),
+                child: Text(
+                  'thlinde',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                ),
               ),
             ),
           );

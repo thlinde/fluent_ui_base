@@ -93,5 +93,18 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
+  fonts:
+    - family: Segoe
+      fonts:
+        - asset: fonts/Segoe-UI-Light-300.ttf
+          weight: 300
+        - asset: fonts/Segoe-UI-400.ttf
+          weight: 400
+        - asset: fonts/Segoe-UI-Semibold-600.ttf
+          weight: 600
+        - asset: fonts/Segoe-UI-Gras-700.ttf
+          weight: 700
+        - asset: fonts/Segoe-UI-Black-900.ttf
+          weight: 900
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
