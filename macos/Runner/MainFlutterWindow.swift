@@ -12,4 +12,10 @@ class MainFlutterWindow: NSWindow {
 
     super.awakeFromNib()
   }
+
+    // add for window_manager
+    override public func order(_ place: NSWindow.OrderingMode, relativeTo otherWin: Int) {
+        super.order(place, relativeTo: otherWin)
+        hiddenWindowAtLaunch()
+    }
 }

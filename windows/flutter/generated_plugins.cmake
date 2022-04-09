@@ -3,6 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  flutter_acrylic
+  system_theme
+  window_manager
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)
